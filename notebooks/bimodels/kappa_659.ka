@@ -1,0 +1,73 @@
+%agent: Ca()
+%agent: CaM()
+%agent: ERKc()
+%agent: ERKn()
+%agent: MEKc()
+%agent: MEKn()
+%agent: Rafc()
+
+%var: 'numTissuePos' 5.000000e-01
+%var: 'numCaInputBaseline' 7.540000e-01
+%var: 'numCaInputAmp' 9.200000e-02
+%var: 'numCaMInputBaseline' 3.630000e-01
+%var: 'numCaMInputAmp' 4.850000e-01
+%var: 'numHillCoeff' 1.400000e+00
+%var: 'numHillWeight' 1.000000e+00
+%var: 'numHillMax' 1.000000e+00
+%var: 'numHillTau' 1.000000e+00
+%var: 'numHillEC50' 5.000000e-01
+%var: 'numMEKCytoToNucParam' 5.000000e-02
+%var: 'numMEKNucToCytoParam' 5.000000e-01
+%var: 'numERKCytoToNucParam' 1.000000e-02
+%var: 'numERKNucToCytoParam' 1.000000e-02
+%var: 'numHillBeta' 2.560000e+00
+%var: 'numHillK' 1.370000e+00
+%var: 'numTotalRafInputs' 0.000000e+00
+%var: 'c_size' 1.000000e+00
+%var: 'n_size' 5.000000e-01
+%var: 'cell_size' 1.000000e+00
+%var: '_c_Rafc_0' 3.011000e+20
+%var: '_c_MEKc_0' 4.817600e+20
+%var: '_c_ERKc_0' 4.215400e+20
+%var: '_n_MEKn_0' 1.204400e+20
+%var: '_n_ERKn_0' 6.022000e+19
+%var: '_c_Ca_0' 4.595990e+20
+%var: '_c_CaM_0' 4.376489e+20
+%var: 'numCytoToNucVolRatio' 2 + 5*'numTissuePos'/7
+%var: 'funcHillCaToRaf' 'numHillWeight'*'numHillBeta'*Ca_c^'numHillCoeff'*(Ca_c^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1)
+%var: 'funcHillCaMToRaf' 'numHillWeight'*'numHillBeta'*CaM_c^'numHillCoeff'*(CaM_c^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1)
+%var: 'funcHillERKToRaf' 'numHillWeight'*'numHillBeta'*ERKn_n^'numHillCoeff'*(ERKn_n^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1)
+%var: 'funcHillRafToMEK' 'numHillWeight'*'numHillBeta'*Rafc_c^'numHillCoeff'*(Rafc_c^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1)
+%var: 'funcHillMEKToERKCyto' 'numHillWeight'*'numHillBeta'*MEKc_c^'numHillCoeff'*(MEKc_c^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1)
+%var: 'funcHillMEKToERKNuc' 'numHillWeight'*'numHillBeta'*MEKn_n^'numHillCoeff'*(MEKn_n^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1)
+%var: 'funcHillERKToERKNuc' 'numHillWeight'*'numHillBeta'*ERKn_n^'numHillCoeff'*(ERKn_n^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1)
+%var: 'arRatepRaf_cyto' 'numHillTau'^(-1)*(-Rafc_c + 'numTotalRafInputs'*'numHillMax')
+%var: 'armRatepRaf_cyto' 0
+%var: 'armRatepMEK_cyto' 0
+%var: 'armRatepERK_cyto' 0
+%var: 'armRatepMEK_nuc' 0
+%var: 'armRatepERK_nuc' 0
+%var: 'arRatepMEK_nuc' 'numHillTau'^(-1)*(-MEKn_n - 'numMEKNucToCytoParam'*MEKn_n + (2 + 5*'numTissuePos'/7)*'numMEKCytoToNucParam'*MEKc_c)
+%var: 'arRatepMEK_cyto' 'numHillTau'^(-1)*(-MEKc_c - 'numMEKCytoToNucParam'*MEKc_c + (2 + 5*'numTissuePos'/7)^(-1)*'numMEKNucToCytoParam'*MEKn_n + 'numHillWeight'*'numHillBeta'*Rafc_c^'numHillCoeff'*(Rafc_c^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1)*'numHillMax')
+%var: 'arRatepERK_cyto' 'numHillTau'^(-1)*(-ERKc_c - 'numERKCytoToNucParam'*ERKc_c + (2 + 5*'numTissuePos'/7)^(-1)*'numERKNucToCytoParam'*ERKn_n + 'numHillWeight'*'numHillBeta'*MEKc_c^'numHillCoeff'*(MEKc_c^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1)*'numHillMax')
+%var: 'arRatepERK_nuc' 'numHillTau'^(-1)*(-ERKn_n + ('numHillWeight'*'numHillBeta'*MEKn_n^'numHillCoeff'*(MEKn_n^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1) - 'numHillWeight'*'numHillBeta'*ERKn_n^'numHillCoeff'*(ERKn_n^'numHillCoeff' + 'numHillK'^'numHillCoeff')^(-1))*'numHillMax' - 'numERKCytoToNucParam'*ERKn_n + (2 + 5*'numTissuePos'/7)*'numERKNucToCytoParam'*ERKc_c)
+
+'_R1' . -> Rafc()@c @ 'arRatepRaf_cyto'
+'_R1_rev' Rafc()@c -> . @ 'armRatepRaf_cyto'
+'_R2' . -> MEKc()@c @ 'arRatepMEK_cyto'
+'_R2_rev' MEKc()@c -> . @ 'armRatepMEK_cyto'
+'_R3' . -> ERKc()@c @ 'arRatepERK_cyto'
+'_R3_rev' ERKc()@c -> . @ 'armRatepERK_cyto'
+'_R4' . -> MEKn()@n @ 'arRatepMEK_nuc'
+'_R4_rev' MEKn()@n -> . @ 'armRatepMEK_nuc'
+'_R5' . -> ERKn()@n @ 'arRatepERK_nuc'
+'_R5_rev' ERKn()@n -> . @ 'armRatepERK_nuc'
+
+%init: '_c_Rafc_0' @c:Rafc()@c
+%init: '_c_MEKc_0' @c:MEKc()@c
+%init: '_c_ERKc_0' @c:ERKc()@c
+%init: '_n_MEKn_0' @n:MEKn()@n
+%init: '_n_ERKn_0' @n:ERKn()@n
+%init: '_c_Ca_0' @c:Ca()@c
+%init: '_c_CaM_0' @c:CaM()@c
+
