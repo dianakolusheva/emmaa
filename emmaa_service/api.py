@@ -94,7 +94,7 @@ def is_available(model, test_corpus, date, bucket=EMMAA_BUCKET_NAME):
 
 
 def get_latest_available_date(
-        model, test_corpus, date_format='date', bucket=EMMAA_BUCKET_NAME):
+        model, test_corpus, date_format='datetime', bucket=EMMAA_BUCKET_NAME):
     if not test_corpus:
         logger.error('Test corpus is missing, cannot find latest date')
         return

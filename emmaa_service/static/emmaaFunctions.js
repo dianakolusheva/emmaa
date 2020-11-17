@@ -55,17 +55,21 @@ function modelRedirect(ddSelect, current_model) {
   window.location.replace(redirect);
 }
 
+function printDate(date) {
+  let date_str = date.toLocaleDateString('en-US', options={"year": "numeric"}) + 
+    "-" + date.toLocaleDateString('en-US', options={"month": "numeric"}) + "-" +
+    date.toLocaleDateString('en-US', options={"day": "numeric"}) + "-" +
+    date.toLocaleTimeString('en-US', options={"hour": "numeric", "hour12": false}) +
+    "-" + date.toLocaleTimeString('en-US', options={"minute": "numeric"}) + "-" +
+    date.toLocaleTimeString('en-US', options={"second": "numeric"})
+  return date_str
+}
 
 function redirectToPast(x) { 
   let new_date = x.x;
   let static_date = new Date('2019-09-30');
   if (new_date >= static_date) {
-    let year = new_date.getFullYear();
-    let month = (1 + new_date.getMonth()).toString();
-    month = month.length > 1 ? month : '0' + month;
-    let day = new_date.getDate().toString();
-    day = day.length > 1 ? day : '0' + day;
-    let new_date_str = year + '-' + month + '-' + day;
+    let new_date_str = printDate(new_date);
     console.log(new_date_str)
     redirectToDate(new_date_str)
   } else {
